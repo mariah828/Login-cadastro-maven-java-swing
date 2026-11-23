@@ -11,17 +11,13 @@ import java.util.ArrayList;
 public class UsuarioCsv {
 	private String caminho = "Informacoes.csv";
 	
-	public void gravar(Usuario u) {
-		String linha = u.getNome() + ";" + u.getEmail() + ";" + u.getSenha() + ";" + u.getPlano();
-		
-		// se usar false no filewriter o arquivo não salva, é apagado;
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter("Informacoes.csv", true));) {
-            bw.write(linha);
-            bw.newLine();
-            
-        } catch (IOException e) {
-            System.out.println("Erro ao gravar: " + e.getMessage());
-        }
+	public void gravar(Usuario u) throws IOException {
+	    String linha = u.getNome() + ";" + u.getEmail() + ";" + u.getSenha() + ";" + u.getPlano();
+
+	    try (BufferedWriter bw = new BufferedWriter(new FileWriter(caminho, true))) {
+	        bw.write(linha);
+	        bw.newLine();
+	    }
 	}
 		
 	public ArrayList<Usuario> ler() {
@@ -38,6 +34,10 @@ public class UsuarioCsv {
 			while ((linha = br.readLine()) != null) {
 				String[] partes = linha.split(";");
 	            	 
+				if (partes.length < 4) {
+				    continue;
+				}
+				
 				Usuario u = new Usuario();
 				u.setNome(partes[0]);
 				u.setEmail(partes[1]);
