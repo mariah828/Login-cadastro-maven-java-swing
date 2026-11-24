@@ -19,6 +19,16 @@ public class UsuarioCsv {
 	        bw.newLine();
 	    }
 	}
+	
+	public void regravarTodos(ArrayList<Usuario> lista) throws IOException {
+
+	    try (BufferedWriter bw = new BufferedWriter(new FileWriter(caminho))) {
+	        for (Usuario u : lista) {
+	            bw.write(u.getNome() + ";" + u.getEmail() + ";" + u.getSenha() + ";" + u.getPlano());
+	            bw.newLine();
+	        }
+	    }
+	}
 		
 	public ArrayList<Usuario> ler() {
 		ArrayList<Usuario> lista = new ArrayList<>();

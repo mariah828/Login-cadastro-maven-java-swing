@@ -494,6 +494,8 @@ public class TelaPrincipal {
         JTextField txtProcurar = criarCampo(242, 240, 300);
         JButton btnProcurar = criarBotao("Procurar", 243, 310, VERMELHO, Color.WHITE);
         JButton btnListar = criarBotao("Listar all", 407, 310, Color.WHITE, Color.BLACK);
+        JButton btnAlterar = criarBotao("Alterar", 243, 380, Color.WHITE, Color.BLACK);
+        JButton btnExcluir = criarBotao("Excluir", 407, 380, VERMELHO, Color.WHITE);
         
         JButton voltarBusca = criarVoltar();
         voltarBusca.addActionListener(e -> mostrarTelaFilmes(painel, janela, email));
@@ -505,7 +507,9 @@ public class TelaPrincipal {
         painel.add(txtProcurar);
         painel.add(btnProcurar);
         painel.add(voltarBusca);
-        painel.add(btnListar);        
+        painel.add(btnListar);   
+        painel.add(btnAlterar);
+        painel.add(btnExcluir);
         painel.setPreferredSize(new Dimension(684, 560));
 
         painel.revalidate();
@@ -559,6 +563,95 @@ public class TelaPrincipal {
                 JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
             } else {
                 JOptionPane.showMessageDialog(null, "Nome: " + achado.getNome() + "\nPlano: " + achado.getPlano());
+            }
+        });
+        
+        btnAlterar.addActionListener(e -> {
+
+            String procurarEmail = txtProcurar.getText().trim();
+
+            Usuario achado = null;
+            for (Usuario x : lista) {
+                if (x.getEmail().equalsIgnoreCase(procurarEmail)) {
+                    achado = x;
+                    break;
+                }
+            }
+
+            if (achado == null) {
+                JOptionPane.showMessageDialog(null, "Digite o email de um usuário existente!");
+                return;
+            }
+
+            String novoNome = JOptionPane.showInputDialog(null, "Novo nome:", achado.getNome());
+
+            if (novoNome == null) {
+                return; // clicou em cancelar
+            }
+
+            novoNome = novoNome.trim();
+
+            if (novoNome.isEmpty() || novoNome.contains(";")) {
+                JOptionPane.showMessageDialog(null, "Nome inválido!");
+                return;
+            }
+
+            String[] opcoes = {"Premium", "Nenhum"};
+            int escolha = JOptionPane.showOptionDialog(null, "Plano:", "Alterar plano",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, opcoes, achado.getPlano());
+
+            if (escolha == JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+
+            achado.setNome(novoNome);
+            achado.setPlano(opcoes[escolha]);
+
+            try {
+                csv.regravarTodos(lista);
+                JOptionPane.showMessageDialog(null, "Usuário atualizado!");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar: " + ex.getMessage());
+            }
+        });
+
+        btnExcluir.addActionListener(e -> {
+
+            String procurarEmail = txtProcurar.getText().trim();
+
+            if (procurarEmail.equalsIgnoreCase("mariahlima828@gmail.com")) {
+                JOptionPane.showMessageDialog(null, "Não é possível excluir o administrador!");
+                return;
+            }
+
+            Usuario achado = null;
+            for (Usuario x : lista) {
+                if (x.getEmail().equalsIgnoreCase(procurarEmail)) {
+                    achado = x;
+                    break;
+                }
+            }
+
+            if (achado == null) {
+                JOptionPane.showMessageDialog(null, "Digite o email de um usuário existente!");
+                return;
+            }
+
+            int confirma = JOptionPane.showConfirmDialog(null,
+                    "Excluir " + achado.getNome() + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
+
+            if (confirma != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            lista.remove(achado);
+
+            try {
+                csv.regravarTodos(lista);
+                JOptionPane.showMessageDialog(null, "Usuário excluído!");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar: " + ex.getMessage());
             }
         });
     }
