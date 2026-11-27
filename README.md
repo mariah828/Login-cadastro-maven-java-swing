@@ -89,13 +89,12 @@ Existe um usuário administrador definido diretamente no código. Ao entrar com 
 
 ## Limitações conhecidas e melhorias futuras
 
-- O e-mail do administrador está fixo no código; o ideal é mover para um arquivo de configuração ou criar um campo de perfil no CSV.
 - O botão ▶ ainda não reproduz nada.
 - O nome digitado no cadastro não é checado contra `;`, o que pode corromper uma linha do CSV.
 - A validação de e-mail é simples (apenas `@` e `.com`).
 - O catálogo é fixo (`filme1.jpg` a `filme11.jpg`); poderia vir de um arquivo ou banco de dados.
-- Trocar o CSV por um banco de dados (por exemplo SQLite) deixaria a busca e a edição mais robustas.
+- Trocar o CSV por um banco de dados.
 
 ## Autoria
 
-Projeto desenvolvido por **[seu nome]**.
+Projeto desenvolvido por **[Mariah Lima]**.
